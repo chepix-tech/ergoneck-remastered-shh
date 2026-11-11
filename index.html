@@ -1,0 +1,1464 @@
+<!doctype html>
+<html lang="ru" class="scroll-smooth">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F8FAFC">
+  <meta name="description"
+    content="ErgoNeck — умная эргономичная система контроля наклона головы и коррекции осанки для защиты шеи от синдрома Tech Neck.">
+  <title>ErgoNeck — Держи голову выше | Система коррекции осанки</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230D9488'/%3E%3Cpath d='M18 16h29v9H28v8h17v8H28v8h20v9H18z' fill='%23FFFFFF'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Precompiled & Responsive Stylesheet (works offline and online with zero FOUC) -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Tailwind CSS CDN (kept for live utility extension when online) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              surface: '#F8FAFC',
+              ink: '#0F172A',
+              muted: '#475569',
+              teal: {
+                50: '#F0FDFA',
+                100: '#CCFBF1',
+                500: '#14B8A6',
+                600: '#0D9488',
+                700: '#0F766E',
+                900: '#134E4A'
+              },
+              indigo: {
+                50: '#EEF2FF',
+                500: '#6366F1',
+                600: '#4F46E5',
+                700: '#4338CA'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+              display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace']
+            },
+            boxShadow: {
+              'soft': '0 10px 40px -10px rgba(15, 23, 42, 0.06)',
+              'glow': '0 20px 50px -12px rgba(13, 148, 136, 0.22)',
+              'card': '0 4px 24px -4px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03)'
+            }
+          }
+        }
+      };
+    }
+  </script>
+
+  <!-- Offline 3D Model Fallback & Google Model Viewer -->
+  <script>
+    if (location.protocol === 'file:' || new URLSearchParams(location.search).has('offline-model')) {
+      document.write('<script src="ergoneck-model-data.js"><\/script>');
+    }
+  </script>
+  <script src="presentation/assets/vendor/model-viewer-umd.min.js" defer></script>
+</head>
+
+<body class="font-sans text-ink antialiased selection:bg-teal-600 selection:text-white">
+
+  <!-- Sticky Glassmorphism Header -->
+  <header class="site-header sticky top-0 z-40 glass-nav border-b border-slate-200/80 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
+      <a class="brand inline-flex items-center gap-2.5 sm:gap-3 min-h-[44px] group focus:outline-none" href="#top"
+        aria-label="ErgoNeck — на главную">
+        <span
+          class="brand-mark w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-teal-600 to-indigo-600 text-white font-display font-extrabold text-base sm:text-lg grid place-items-center shadow-md shadow-teal-600/20 group-hover:scale-105 transition-transform duration-300">E</span>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-slate-900">Ergo<span
+              class="text-teal-600">Neck</span></span>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 -mt-1">Posture System</span>
+        </div>
+      </a>
+
+      <nav class="desktop-nav hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Основная навигация">
+        <a href="#problem"
+          class="min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-teal-50/60 transition-all inline-flex items-center">Проблема</a>
+        <a href="#solution"
+          class="min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-teal-50/60 transition-all inline-flex items-center">Решение</a>
+        <a href="#live-demo"
+          class="min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-medium text-teal-700 bg-teal-50/90 hover:bg-teal-100/80 transition-all inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+          Live Симулятор
+        </a>
+        <a href="#benefits"
+          class="min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-teal-50/60 transition-all inline-flex items-center">Преимущества</a>
+        <a href="#work"
+          class="min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-teal-50/60 transition-all inline-flex items-center">Как
+          работает</a>
+        <a href="#prototype"
+          class="min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-teal-50/60 transition-all inline-flex items-center">3D
+          Прототип</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <a class="header-cta hidden sm:inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-teal-600 shadow-sm hover:shadow-glow transition-all duration-300"
+          href="#purchase">
+          <span>Купить ErgoNeck</span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 7h10v10" />
+            <path d="M7 17 17 7" />
+          </svg>
+        </a>
+
+        <button
+          class="menu-toggle lg:hidden w-11 h-11 rounded-xl bg-slate-900 text-white grid place-items-center hover:bg-teal-600 transition-colors cursor-pointer"
+          type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+          <div class="w-5 flex flex-col gap-1.5 items-center justify-center">
+            <span class="menu-bar-1 block w-5 h-0.5 bg-white transition-transform duration-300"></span>
+            <span class="menu-bar-2 block w-5 h-0.5 bg-white transition-transform duration-300"></span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <nav
+    class="mobile-menu fixed inset-x-0 top-16 sm:top-20 bottom-0 z-30 bg-slate-900/95 backdrop-blur-xl text-white px-5 pt-4 pb-8 overflow-y-auto overscroll-contain flex flex-col justify-between -translate-y-full opacity-0 pointer-events-none transition-all duration-300 lg:hidden"
+    id="mobile-menu" aria-label="Мобильная навигация" aria-hidden="true">
+    <div class="flex flex-col divide-y divide-slate-800/90">
+      <a href="#problem"
+        class="min-h-[52px] py-3.5 flex items-center justify-between text-base sm:text-lg font-medium hover:text-teal-400 transition-colors">
+        <span>Проблема vs Решение</span>
+        <span class="font-mono text-xs text-teal-400">01</span>
+      </a>
+      <a href="#solution"
+        class="min-h-[52px] py-3.5 flex items-center justify-between text-base sm:text-lg font-medium hover:text-teal-400 transition-colors">
+        <span>Наше решение</span>
+        <span class="font-mono text-xs text-teal-400">02</span>
+      </a>
+      <a href="#live-demo"
+        class="min-h-[52px] py-3.5 flex items-center justify-between text-base sm:text-lg font-medium text-teal-300 hover:text-teal-200 transition-colors">
+        <span class="inline-flex items-center gap-2"><span
+            class="w-2 h-2 rounded-full bg-teal-400 animate-ping"></span>Live Симулятор осанки</span>
+        <span class="font-mono text-xs text-teal-400">DEMO</span>
+      </a>
+      <a href="#benefits"
+        class="min-h-[52px] py-3.5 flex items-center justify-between text-base sm:text-lg font-medium hover:text-teal-400 transition-colors">
+        <span>Преимущества</span>
+        <span class="font-mono text-xs text-teal-400">03</span>
+      </a>
+      <a href="#work"
+        class="min-h-[52px] py-3.5 flex items-center justify-between text-base sm:text-lg font-medium hover:text-teal-400 transition-colors">
+        <span>Как работает (3 шага)</span>
+        <span class="font-mono text-xs text-teal-400">04</span>
+      </a>
+      <a href="#prototype"
+        class="min-h-[52px] py-3.5 flex items-center justify-between text-base sm:text-lg font-medium hover:text-teal-400 transition-colors">
+        <span>Интерактивный 3D-прототип</span>
+        <span class="font-mono text-xs text-teal-400">05</span>
+      </a>
+    </div>
+    <a class="mobile-support mt-6 w-full min-h-[52px] py-3.5 rounded-2xl bg-teal-500 text-slate-950 font-bold flex items-center justify-center text-base shadow-lg shadow-teal-500/25 hover:bg-teal-400 transition-all"
+      href="#purchase">
+      Купить ErgoNeck
+    </a>
+  </nav>
+
+  <main id="top">
+    <!-- HERO SECTION -->
+    <section class="hero relative pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pt-16 lg:pb-24 overflow-hidden bg-tech-grid">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-center">
+
+          <!-- Left Column: Copy & Actions -->
+          <div class="hero-copy lg:col-span-6 space-y-5 sm:space-y-6">
+            <div
+              class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-teal-700 text-[11px] sm:text-xs font-mono uppercase tracking-wider shadow-sm max-w-full">
+              <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse shrink-0"></span>
+              <span class="truncate">Механика осознанной осанки · HealthTech</span>
+            </div>
+
+            <div class="space-y-2.5 sm:space-y-3">
+              <h1
+                class="font-display font-extrabold text-4xl sm:text-6xl xl:text-7xl tracking-tight text-slate-900 leading-[1.04]">
+                Ergo<span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-indigo-600">Neck</span>
+              </h1>
+              <p
+                class="hero-lead font-display font-bold text-xl sm:text-3xl xl:text-4xl text-slate-800 tracking-tight leading-snug">
+                Держи голову выше —<br class="hidden sm:inline"> работай без боли в шее и сутулости
+              </p>
+            </div>
+
+            <p class="hero-description text-sm sm:text-lg text-slate-600 leading-relaxed max-w-xl">
+              Лёгкое эргономичное устройство для контроля положения головы без сложной электроники. Мягко отслеживает
+              критический угол наклона при синдроме <span class="font-semibold text-slate-800">«tech neck»</span> и
+              физически помогает вернуть шею в анатомически правильное положение.
+            </p>
+
+            <div
+              class="hero-actions flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 pt-1 sm:pt-2">
+              <a class="button button-primary min-h-[48px] inline-flex items-center justify-center gap-3 px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-teal-600 text-white font-semibold text-sm sm:text-base shadow-glow hover:bg-teal-700 hover:-translate-y-0.5 transition-all duration-300"
+                href="#live-demo">
+                <span>Запустить Live-симулятор</span>
+                <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+                </svg>
+              </a>
+              <a class="button button-secondary min-h-[48px] inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:py-4 rounded-2xl glass-card text-slate-800 font-semibold text-sm sm:text-base hover:border-teal-500/40 hover:bg-white hover:-translate-y-0.5 transition-all duration-300"
+                href="#prototype">
+                <svg class="w-5 h-5 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path
+                    d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                  <path d="m3.3 7 8.7 5 8.7-5" />
+                  <path d="M12 22V12" />
+                </svg>
+                <span>3D-прототип и чертёж</span>
+              </a>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="hero-metrics grid grid-cols-3 gap-2.5 sm:gap-4 pt-5 sm:pt-6 border-t border-slate-200/90">
+              <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white/80 border border-slate-200/70 shadow-sm">
+                <strong class="block font-mono font-bold text-base sm:text-2xl text-teal-600">0–15°</strong>
+                <span class="text-[11px] sm:text-xs text-slate-500 font-medium leading-tight block mt-0.5">рабочий
+                  диапазон</span>
+              </div>
+              <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white/80 border border-slate-200/70 shadow-sm">
+                <strong class="block font-mono font-bold text-base sm:text-2xl text-slate-900">&lt; 30 сек</strong>
+                <span class="text-[11px] sm:text-xs text-slate-500 font-medium leading-tight block mt-0.5">время
+                  надевания</span>
+              </div>
+              <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white/80 border border-slate-200/70 shadow-sm">
+                <strong class="block font-mono font-bold text-base sm:text-2xl text-indigo-600">0%</strong>
+                <span
+                  class="text-[11px] sm:text-xs text-slate-500 font-medium leading-tight block mt-0.5">электроники</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Product Visual Card -->
+          <div class="hero-visual lg:col-span-6 relative" aria-label="3D-модель и прототип ErgoNeck">
+            <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl border border-slate-200/80 group">
+              <div class="relative">
+                <!-- Top floating badges -->
+                <div
+                  class="visual-label absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl glass-dark text-white font-mono text-[11px] sm:text-xs tracking-wider">
+                  <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+                  PROTOTYPE / REV.01
+                </div>
+
+                <button type="button" data-modal-type="model"
+                  class="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl glass-dark text-teal-300 hover:text-white hover:bg-teal-600/80 font-mono text-xs transition-all cursor-pointer">
+                  <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path
+                      d="M16.466 7.5C15.643 4.237 13.952 2 12 2 9.239 2 7 6.477 7 12s2.239 10 5 10c.342 0 .677-.069 1-.2" />
+                    <path d="m15.194 13.707 3.814 1.86-1.86 3.814" />
+                    <path
+                      d="M19 15.57c-1.804.885-4.274 1.43-7 1.43-5.523 0-10-2.239-10-5s4.477-5 10-5c4.838 0 8.873 1.718 9.8 4" />
+                  </svg>
+                  <span>Открыть 3D</span>
+                </button>
+
+                <img src="ergoneck-hero.jpg" alt="Прототип ErgoNeck и технический чертёж" width="1280" height="720"
+                  class="w-full h-auto aspect-[16/10] object-cover group-hover:scale-[1.02] transition-transform duration-500">
+              </div>
+
+              <!-- Bottom Glass Telemetry Bar (stacked cleanly on mobile so image is 100% visible, floating on sm+) -->
+              <div
+                class="angle-chip relative sm:absolute sm:inset-x-4 sm:bottom-4 z-20 m-3 sm:m-0 p-3.5 sm:p-4 rounded-2xl glass-dark text-white flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-400/30 grid place-items-center text-teal-300 shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path
+                        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-[11px] sm:text-xs text-slate-300 truncate">Анатомический контроль шеи</div>
+                    <div class="text-xs sm:text-sm font-semibold text-white truncate">Защита от синдрома «Tech Neck»
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <span
+                    class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-teal-300 block">Норма</span>
+                  <strong class="font-mono text-lg sm:text-xl font-bold text-white">0–15°</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE STRIP -->
+    <section class="preview-strip bg-slate-900 text-slate-200 py-3.5 sm:py-4 border-y border-slate-800"
+      aria-label="Кратко о проекте">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-x-5 sm:gap-x-8 gap-y-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest">
+        <span class="inline-flex items-center gap-1.5"><span
+            class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>Лёгкий</span>
+        <span class="inline-flex items-center gap-1.5"><span
+            class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>Механический</span>
+        <span class="inline-flex items-center gap-1.5"><span
+            class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>Регулируемый</span>
+        <span class="inline-flex items-center gap-1.5"><span
+            class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>Доступный (≤ 5000 ₸)</span>
+      </div>
+    </section>
+
+    <!-- 01 / PROBLEM VS SOLUTION SECTION -->
+    <section class="problem section scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-28 relative overflow-hidden"
+      id="problem">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-16">
+
+        <!-- Section Header -->
+        <div class="section-head reveal flex flex-col lg:flex-row lg:items-end justify-between gap-4 sm:gap-6">
+          <div>
+            <p
+              class="section-index font-mono text-xs font-semibold uppercase tracking-widest text-teal-600 mb-2 sm:mb-3">
+              01 / ПРОБЛЕМА И СРАВНЕНИЕ</p>
+            <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight leading-tight">
+              Гаджет ниже. <span class="text-teal-600">Нагрузка выше.</span>
+            </h2>
+          </div>
+          <p class="text-slate-600 max-w-xl text-sm sm:text-lg leading-relaxed">
+            При долгой работе со смартфоном или ноутбуком голова незаметно наклоняется вперёд — нагрузка на шейный отдел
+            позвоночника возрастает в 4–5 раз.
+          </p>
+        </div>
+
+        <!-- Two-Column Problem Breakdown -->
+        <div class="problem-layout grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+          <!-- Left: Posture Visual Analysis -->
+          <div
+            class="angle-diagram reveal lg:col-span-6 relative rounded-3xl overflow-hidden border border-slate-200 shadow-soft bg-slate-900 min-h-[380px] sm:min-h-[500px]">
+            <img class="posture-image absolute inset-0 w-full h-full object-cover object-center"
+              src="posture-analysis.png"
+              alt="Человек с наклонённой вперёд головой использует смартфон; показана нагрузка на шейный отдел">
+            <div
+              class="posture-shade absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"
+              aria-hidden="true"></div>
+
+            <div
+              class="absolute top-4 left-4 sm:top-5 sm:left-5 z-10 px-3 py-1.5 rounded-lg glass-dark font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-200">
+              POSTURE ANALYSIS · TECH NECK
+            </div>
+
+            <div
+              class="posture-angle absolute top-4 right-4 sm:top-5 sm:right-5 z-10 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-rose-500/90 backdrop-blur-md border border-rose-300/40 text-white grid place-items-center shadow-lg">
+              <div class="text-center leading-none">
+                <span class="font-mono font-bold text-base sm:text-lg block">35°</span>
+                <span class="text-[9px] font-mono uppercase opacity-90">критично</span>
+              </div>
+            </div>
+
+            <div
+              class="axis-label axis-x hidden sm:block absolute bottom-4 right-5 z-10 font-mono text-[11px] text-slate-300">
+              ОСЬ X / ОСЬ Y · 35.0° FORWARD ANGLE
+            </div>
+
+            <div
+              class="diagram-note absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-auto z-10 p-3.5 sm:p-4 rounded-2xl glass-dark border-l-4 border-l-rose-500 text-white sm:max-w-xs">
+              <div class="text-[11px] sm:text-xs font-mono uppercase text-rose-300 mb-0.5">Синдром «Tech Neck»</div>
+              <div class="text-xs sm:text-sm font-medium">Типичный наклон при работе со смартфоном перегружает мышцы шеи
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Problem Copy & 3 Impacts -->
+          <div class="problem-copy reveal lg:col-span-6 space-y-5 sm:space-y-6">
+            <p class="large-copy font-display font-bold text-xl sm:text-3xl text-slate-900 leading-snug">
+              При долгой работе с гаджетами голова незаметно наклоняется вперёд.
+            </p>
+
+            <div class="space-y-3.5 sm:space-y-4">
+              <div
+                class="impact-row p-4 sm:p-5 rounded-2xl glass-card shadow-card hover:border-teal-500/40 transition-all flex items-start gap-3.5 sm:gap-4">
+                <span
+                  class="impact-icon shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-rose-50 border border-rose-200/60 text-rose-600 font-mono font-bold text-sm grid place-items-center">01</span>
+                <div>
+                  <strong class="text-base sm:text-lg font-display font-bold text-slate-900 block">Усталость</strong>
+                  <p class="text-slate-600 text-sm sm:text-base mt-1 leading-relaxed">Дольше держать позу становится
+                    сложнее, появляется хроническая тяжесть в воротниковой зоне.</p>
+                </div>
+              </div>
+
+              <div
+                class="impact-row p-4 sm:p-5 rounded-2xl glass-card shadow-card hover:border-teal-500/40 transition-all flex items-start gap-3.5 sm:gap-4">
+                <span
+                  class="impact-icon shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-50 border border-amber-200/60 text-amber-600 font-mono font-bold text-sm grid place-items-center">02</span>
+                <div>
+                  <strong class="text-base sm:text-lg font-display font-bold text-slate-900 block">Напряжение</strong>
+                  <p class="text-slate-600 text-sm sm:text-base mt-1 leading-relaxed">Мышцы шеи и плеч работают
+                    интенсивнее, компенсируя вес наклонённой головы (до 18–22 кг при 35–45°).</p>
+                </div>
+              </div>
+
+              <div
+                class="impact-row p-4 sm:p-5 rounded-2xl glass-card shadow-card hover:border-teal-500/40 transition-all flex items-start gap-3.5 sm:gap-4">
+                <span
+                  class="impact-icon shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 font-mono font-bold text-sm grid place-items-center">03</span>
+                <div>
+                  <strong class="text-base sm:text-lg font-display font-bold text-slate-900 block">Дискомфорт</strong>
+                  <p class="text-slate-600 text-sm sm:text-base mt-1 leading-relaxed">Фокус на задаче уступает желанию
+                    сменить позу, снижается продуктивность и концентрация.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Comparison Block: Проблема vs Решение -->
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 pt-2 sm:pt-4">
+          <!-- Without ErgoNeck -->
+          <div class="p-5 sm:p-8 rounded-3xl bg-white border border-rose-200/80 shadow-card relative overflow-hidden">
+            <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-mono text-[11px] sm:text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                БЕЗ ERGONECK
+              </span>
+              <span class="font-mono text-xs sm:text-sm font-bold text-rose-600">Угол 35°–45°</span>
+            </div>
+            <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900 mb-2">Неконтролируемая сутулость («Tech
+              Neck»)</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-5">
+              Пользователь увлекается экраном и не замечает, как голова опускается всё ниже. Шейные позвонки испытывают
+              избыточную компрессию.
+            </p>
+            <div class="grid grid-cols-2 gap-2.5 sm:gap-3 pt-4 border-t border-slate-100 text-xs">
+              <div class="p-3 rounded-xl bg-rose-50/60">
+                <span class="text-slate-500 block">Нагрузка на шею</span>
+                <strong class="font-mono text-sm sm:text-base text-rose-700">~18–22 кг</strong>
+              </div>
+              <div class="p-3 rounded-xl bg-rose-50/60">
+                <span class="text-slate-500 block">Контроль позы</span>
+                <strong class="font-mono text-sm sm:text-base text-rose-700">Отсутствует</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- With ErgoNeck -->
+          <div
+            class="p-5 sm:p-8 rounded-3xl bg-gradient-to-br from-teal-50/90 via-white to-indigo-50/60 border-2 border-teal-500/40 shadow-glow relative overflow-hidden">
+            <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-600 text-white font-mono text-[11px] sm:text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-teal-200"></span>
+                С ERGONECK
+              </span>
+              <span class="font-mono text-xs sm:text-sm font-bold text-teal-700">Норма 0°–15°</span>
+            </div>
+            <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900 mb-2">Мгновенная тактильная подсказка и
+              мягкая опора</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-5">
+              При попытке наклонить голову глубже 15° подушка мягко сигнализирует упором и физически помогает вернуть
+              шею в анатомически правильный ракурс.
+            </p>
+            <div class="grid grid-cols-2 gap-2.5 sm:gap-3 pt-4 border-t border-teal-200/60 text-xs">
+              <div class="p-3 rounded-xl bg-white/90 border border-teal-100">
+                <span class="text-slate-500 block">Нагрузка на шею</span>
+                <strong class="font-mono text-sm sm:text-base text-teal-700">~5–8 кг (Норма)</strong>
+              </div>
+              <div class="p-3 rounded-xl bg-white/90 border border-teal-100">
+                <span class="text-slate-500 block">Автономность</span>
+                <strong class="font-mono text-sm sm:text-base text-teal-700">100% без зарядки</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 02 / OUR SOLUTION SECTION -->
+    <section
+      class="solution section scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-28 bg-slate-900 text-white relative overflow-hidden"
+      id="solution">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="section-head reveal mb-8 sm:mb-14">
+          <p
+            class="section-index light font-mono text-xs font-semibold uppercase tracking-widest text-teal-400 mb-2 sm:mb-3">
+            02 / НАШЕ РЕШЕНИЕ</p>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-tight">
+            Мягкая опора. <span class="text-teal-400">Без лишней сложности.</span>
+          </h2>
+        </div>
+
+        <div class="solution-grid grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 lg:gap-12 items-center">
+          <div
+            class="solution-statement reveal lg:col-span-6 space-y-5 sm:space-y-8 p-6 sm:p-10 rounded-3xl bg-slate-800/70 border border-slate-700/80 shadow-2xl">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/15 border border-teal-400/30 text-teal-300 text-xs font-mono">
+              <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+              БИОМЕХАНИЧЕСКИЙ КОНТРОЛЬ
+            </div>
+            <p class="font-display font-bold text-xl sm:text-3xl text-slate-100 leading-snug">
+              ErgoNeck мягко ограничивает чрезмерный наклон головы и помогает сохранять более комфортное положение.
+            </p>
+
+            <!-- Range visual -->
+            <div class="pt-2 sm:pt-4">
+              <div
+                class="range-display flex items-center gap-3 sm:gap-4 font-mono text-lg sm:text-xl font-bold text-teal-300">
+                <span class="range-min px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700">0°</span>
+                <div class="range-line flex-1 h-3 rounded-full bg-slate-900 p-0.5 border border-slate-700 relative">
+                  <i class="block h-full w-full rounded-full bg-gradient-to-r from-teal-400 to-indigo-400"></i>
+                </div>
+                <span
+                  class="range-max px-3 py-1.5 rounded-xl bg-slate-900 border border-teal-500/50 text-teal-300">15°</span>
+              </div>
+              <small
+                class="block mt-3 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-slate-400 text-center">
+                Рекомендуемый рабочий диапазон наклона головы
+              </small>
+            </div>
+          </div>
+
+          <div class="spec-stack lg:col-span-6 space-y-3.5 sm:space-y-4">
+            <article
+              class="spec-card reveal p-5 sm:p-6 rounded-2xl bg-slate-800/50 border border-slate-700/70 hover:border-teal-400/50 hover:bg-slate-800 transition-all duration-300 flex items-start gap-4 sm:gap-5">
+              <div
+                class="spec-number shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-teal-500/15 border border-teal-400/30 text-teal-300 font-mono font-bold text-sm grid place-items-center">
+                01</div>
+              <div>
+                <strong class="font-display font-bold text-base sm:text-lg text-white block">Мягкое ограничение</strong>
+                <p class="text-slate-300 text-sm sm:text-base mt-1 leading-relaxed">Конструкция даёт тактильную
+                  подсказку, когда наклон становится чрезмерным, и бережно возвращает шею в норму.</p>
+              </div>
+            </article>
+
+            <article
+              class="spec-card reveal p-5 sm:p-6 rounded-2xl bg-slate-800/50 border border-slate-700/70 hover:border-teal-400/50 hover:bg-slate-800 transition-all duration-300 flex items-start gap-4 sm:gap-5">
+              <div
+                class="spec-number shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-teal-500/15 border border-teal-400/30 text-teal-300 font-mono font-bold text-sm grid place-items-center">
+                02</div>
+              <div>
+                <strong class="font-display font-bold text-base sm:text-lg text-white block">Быстрая фиксация</strong>
+                <p class="text-slate-300 text-sm sm:text-base mt-1 leading-relaxed">Наденьте и настройте устройство
+                  менее чем за 30 секунд под индивидуальную анатомию шеи.</p>
+              </div>
+            </article>
+
+            <article
+              class="spec-card reveal p-5 sm:p-6 rounded-2xl bg-slate-800/50 border border-slate-700/70 hover:border-teal-400/50 hover:bg-slate-800 transition-all duration-300 flex items-start gap-4 sm:gap-5">
+              <div
+                class="spec-number shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-teal-500/15 border border-teal-400/30 text-teal-300 font-mono font-bold text-sm grid place-items-center">
+                03</div>
+              <div>
+                <strong class="font-display font-bold text-base sm:text-lg text-white block">Полная
+                  автономность</strong>
+                <p class="text-slate-300 text-sm sm:text-base mt-1 leading-relaxed">Механический принцип — никаких
+                  сложных датчиков, фоновых приложений и ежедневной зарядки.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE LIVE DEMO WIDGET (SIMULATOR) -->
+    <section class="scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-28 relative overflow-hidden" id="live-demo">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="section-head reveal flex flex-col lg:flex-row lg:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 font-mono text-xs font-semibold mb-2 sm:mb-3">
+              <span class="w-2 h-2 rounded-full bg-teal-600 animate-ping"></span>
+              INTERACTIVE LIVE DEMO
+            </div>
+            <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight leading-tight">
+              Симулятор наклона <span class="text-teal-600">и коррекции осанки</span>
+            </h2>
+          </div>
+          <p class="text-slate-600 max-w-xl text-sm sm:text-base">
+            Протестируйте работу ErgoNeck прямо сейчас: меняйте угол наклона головы ползунком и включите режим активной
+            поддержки ErgoNeck.
+          </p>
+        </div>
+
+        <!-- Interactive Dashboard Widget -->
+        <div class="reveal glass-card rounded-3xl p-4 sm:p-8 lg:p-10 shadow-soft border border-slate-200/90">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-center">
+
+            <!-- Left: Controls & Telemetry -->
+            <div class="lg:col-span-7 space-y-5 sm:space-y-6">
+              <!-- Top bar with ErgoNeck Mode Toggle -->
+              <div
+                class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 p-4 rounded-2xl bg-slate-900 text-white">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-400/40 grid place-items-center text-teal-300 shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect width="16" height="16" x="4" y="4" rx="2" />
+                      <rect width="6" height="6" x="9" y="9" rx="1" />
+                      <path d="M15 2v2" />
+                      <path d="M15 20v2" />
+                      <path d="M2 15h2" />
+                      <path d="M2 9h2" />
+                      <path d="M20 15h2" />
+                      <path d="M20 9h2" />
+                      <path d="M9 2v2" />
+                      <path d="M9 20v2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-sm font-bold">Режим коррекции ErgoNeck</div>
+                    <div class="text-xs text-slate-300" id="sim-mode-subtitle">Активен: мягко возвращает угол к ≤ 15°
+                    </div>
+                  </div>
+                </div>
+                <button type="button" id="ergo-mode-toggle" role="switch" aria-checked="true"
+                  class="min-h-[44px] w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-teal-500 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer hover:bg-teal-400">
+                  <span id="ergo-mode-dot" class="w-2.5 h-2.5 rounded-full bg-slate-950"></span>
+                  <span id="ergo-mode-label">ERGONECK: ВКЛ</span>
+                </button>
+              </div>
+
+              <!-- Angle Slider Control -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <label for="posture-slider" class="text-sm font-semibold text-slate-700">Угол наклона головы
+                    вперёд:</label>
+                  <span id="sim-angle-badge"
+                    class="px-3 py-1 rounded-lg bg-teal-50 text-teal-700 font-mono font-bold text-base sm:text-lg border border-teal-200">12°</span>
+                </div>
+                <input id="posture-slider" type="range" min="0" max="50" value="12"
+                  class="angle-slider w-full cursor-pointer" aria-label="Угол наклона головы">
+                <div class="flex justify-between font-mono text-[10px] sm:text-[11px] text-slate-500">
+                  <span>0° Прямо</span>
+                  <span class="text-teal-600 font-semibold">15° Норма</span>
+                  <span class="text-amber-600">30° Сутулость</span>
+                  <span class="text-rose-600">50° Tech Neck</span>
+                </div>
+              </div>
+
+              <!-- Quick Preset Buttons -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button type="button" data-preset-angle="5"
+                  class="preset-btn min-h-[44px] px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 border border-slate-200 transition-all text-left sm:text-center cursor-pointer">
+                  0–10° Анатомическая норма
+                </button>
+                <button type="button" data-preset-angle="15"
+                  class="preset-btn min-h-[44px] px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 border border-slate-200 transition-all text-left sm:text-center cursor-pointer">
+                  15° Рабочий упор ErgoNeck
+                </button>
+                <button type="button" data-preset-angle="35"
+                  class="preset-btn min-h-[44px] px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all text-left sm:text-center cursor-pointer">
+                  35° Смартфон (Тест коррекции)
+                </button>
+                <button type="button" data-preset-angle="45"
+                  class="preset-btn min-h-[44px] px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all text-left sm:text-center cursor-pointer">
+                  45° Сильная сутулость
+                </button>
+              </div>
+
+              <!-- Live Telemetry Cards -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-1">
+                <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                  <span class="text-xs text-slate-500 block mb-1">Текущий угол</span>
+                  <strong id="sim-angle-readout"
+                    class="font-mono font-bold text-xl sm:text-2xl text-slate-900">12°</strong>
+                  <span class="text-[11px] text-teal-600 font-mono block mt-0.5">Диапазон 0–15°</span>
+                </div>
+                <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                  <span class="text-xs text-slate-500 block mb-1">Нагрузка на шею</span>
+                  <strong id="sim-load-readout" class="font-mono font-bold text-xl sm:text-2xl text-slate-900">7.4
+                    кг</strong>
+                  <span id="sim-load-sub" class="text-[11px] text-slate-500 font-mono block mt-0.5">Безопасная
+                    нагрузка</span>
+                </div>
+                <div class="col-span-2 sm:col-span-1 p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                  <span class="text-xs text-slate-500 block mb-1">Статус системы</span>
+                  <strong id="sim-status-readout"
+                    class="font-display font-bold text-base text-teal-600 block mt-0.5">Оптимальная поза</strong>
+                  <span id="sim-action-sub" class="text-[11px] text-slate-500 block mt-0.5">Шея в комфортной зоне</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Interactive SVG Biomechanical Visualization -->
+            <div class="lg:col-span-5">
+              <div
+                class="relative rounded-3xl bg-slate-900 p-5 sm:p-6 text-white border border-slate-800 shadow-xl flex flex-col items-center justify-center min-h-[320px] sm:min-h-[360px]">
+                <div
+                  class="w-full flex items-center justify-between text-[11px] sm:text-xs font-mono text-slate-400 mb-2">
+                  <span>BIOMECHANICS LIVE VIEW</span>
+                  <span id="sim-svg-pill"
+                    class="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">НОРМА
+                    0–15°</span>
+                </div>
+
+                <!-- Dynamic SVG Neck & Head Model -->
+                <svg viewBox="0 0 280 260" class="w-full max-w-[240px] sm:max-w-[280px] h-auto overflow-visible"
+                  aria-label="Динамическая схема наклона головы">
+                  <line x1="110" y1="30" x2="110" y2="220" stroke="rgba(148,163,184,0.3)" stroke-dasharray="4 4"
+                    stroke-width="1.5" />
+                  <path d="M110 175 L110 45 A130 130 0 0 1 144 49 Z" fill="rgba(20, 184, 166, 0.16)"
+                    stroke="rgba(20, 184, 166, 0.4)" stroke-width="1" />
+                  <text x="116" y="42" fill="#5EEAD4" font-size="9" font-family="JetBrains Mono">0–15° НОРМА</text>
+
+                  <path d="M65 235 C65 195, 90 180, 110 180 C130 180, 155 195, 155 235" fill="none" stroke="#64748B"
+                    stroke-width="8" stroke-linecap="round" />
+
+                  <path id="sim-collar" d="M92 162 Q115 154 136 165 L140 182 Q115 178 90 180 Z" fill="#0D9488"
+                    stroke="#5EEAD4" stroke-width="2" />
+
+                  <g id="sim-head-group" transform="rotate(12, 110, 175)"
+                    style="transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);">
+                    <line x1="110" y1="175" x2="110" y2="95" stroke="#38BDF8" stroke-width="7" stroke-linecap="round" />
+                    <circle cx="110" cy="160" r="3" fill="#0F172A" />
+                    <circle cx="110" cy="142" r="3" fill="#0F172A" />
+                    <circle cx="110" cy="124" r="3" fill="#0F172A" />
+                    <circle cx="114" cy="78" r="30" fill="#1E293B" stroke="#E2E8F0" stroke-width="3" />
+                    <circle cx="132" cy="74" r="3.5" fill="#38BDF8" />
+                    <path d="M143 78 L153 82" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" />
+                  </g>
+
+                  <circle cx="110" cy="175" r="5" fill="#F8FAFC" stroke="#0D9488" stroke-width="3" />
+                </svg>
+
+                <p id="sim-feedback-banner"
+                  class="w-full mt-3 p-3 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-center text-slate-300 font-medium">
+                  Опора ErgoNeck мягко фиксирует шею в безопасном коридоре 0–15°.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 / BENEFITS SECTION -->
+    <section
+      class="benefits section scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-28 bg-slate-100/80 border-y border-slate-200/80"
+      id="benefits">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="section-head reveal mb-8 sm:mb-14">
+          <p class="section-index font-mono text-xs font-semibold uppercase tracking-widest text-teal-600 mb-2 sm:mb-3">
+            03 / ПРЕИМУЩЕСТВА</p>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight leading-tight">
+            Технологично — <span class="text-teal-600">не значит сложно.</span>
+          </h2>
+        </div>
+
+        <div class="benefit-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <!-- Card 1: Featured -->
+          <article
+            class="benefit-card benefit-featured reveal p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950 text-white shadow-xl flex flex-col justify-between min-h-[240px] sm:min-h-[290px]"
+            data-tilt>
+            <div class="card-top flex items-center justify-between font-mono text-xs text-teal-300">
+              <span>NO.01</span>
+              <span class="text-base">↗</span>
+            </div>
+            <div class="my-4 sm:my-6">
+              <div
+                class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-teal-500/20 border border-teal-400/30 text-teal-300 font-mono text-xs">
+                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+                100% PASSIVE MECHANICS
+              </div>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl sm:text-2xl mb-2">Без электроники</h3>
+              <p class="text-slate-300 text-sm leading-relaxed">Работает всегда. Не требует зарядки, синхронизации по
+                Bluetooth или сложного обслуживания.</p>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article
+            class="benefit-card reveal p-6 sm:p-7 rounded-3xl glass-card shadow-card hover:border-teal-500/40 flex flex-col justify-between min-h-[240px] sm:min-h-[290px]"
+            data-tilt>
+            <div class="card-top flex items-center justify-between font-mono text-xs text-slate-400">
+              <span>NO.02</span>
+              <span class="text-teal-600 text-base">↗</span>
+            </div>
+            <div class="card-value font-mono font-extrabold text-3xl sm:text-4xl text-teal-600 my-4 sm:my-6">
+              ≤ 5000 <small class="text-2xl">₸</small>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Доступная стоимость</h3>
+              <p class="text-slate-600 text-sm leading-relaxed">Простая конструкция и доступные материалы удерживают
+                цену прототипа в пределах студенческого и семейного бюджета.</p>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article
+            class="benefit-card reveal p-6 sm:p-7 rounded-3xl glass-card shadow-card hover:border-teal-500/40 flex flex-col justify-between min-h-[240px] sm:min-h-[290px]"
+            data-tilt>
+            <div class="card-top flex items-center justify-between font-mono text-xs text-slate-400">
+              <span>NO.03</span>
+              <span class="text-teal-600 text-base">↗</span>
+            </div>
+            <div class="material-swatch flex items-center my-4 sm:my-6">
+              <span class="w-11 h-11 rounded-full bg-teal-100 border-4 border-white shadow-sm"></span>
+              <span class="w-11 h-11 rounded-full bg-teal-500 border-4 border-white shadow-sm -ml-3"></span>
+              <span class="w-11 h-11 rounded-full bg-slate-900 border-4 border-white shadow-sm -ml-3"></span>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Комфортные материалы</h3>
+              <p class="text-slate-600 text-sm leading-relaxed">Лёгкие гипоаллергенные материалы в зонах контакта с
+                кожей не вызывают раздражения при долгой работе.</p>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article
+            class="benefit-card reveal p-6 sm:p-7 rounded-3xl glass-card shadow-card hover:border-teal-500/40 flex flex-col justify-between min-h-[240px] sm:min-h-[290px]"
+            data-tilt>
+            <div class="card-top flex items-center justify-between font-mono text-xs text-slate-400">
+              <span>NO.04</span>
+              <span class="text-indigo-600 text-base">↗</span>
+            </div>
+            <div class="my-4 sm:my-6 space-y-2.5 w-36">
+              <div class="h-1.5 bg-slate-200 rounded-full relative"><span
+                  class="w-3.5 h-3.5 rounded-full bg-white border-2 border-teal-600 absolute -top-1 left-5"></span>
+              </div>
+              <div class="h-1.5 bg-slate-200 rounded-full relative"><span
+                  class="w-3.5 h-3.5 rounded-full bg-white border-2 border-indigo-600 absolute -top-1 left-20"></span>
+              </div>
+              <div class="h-1.5 bg-slate-200 rounded-full relative"><span
+                  class="w-3.5 h-3.5 rounded-full bg-white border-2 border-teal-600 absolute -top-1 left-11"></span>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Точная регулировка</h3>
+              <p class="text-slate-600 text-sm leading-relaxed">Ремни и высота опоры настраиваются индивидуально под
+                любого пользователя.</p>
+            </div>
+          </article>
+
+          <!-- Card 5: Wide -->
+          <article
+            class="benefit-card benefit-wide reveal md:col-span-2 p-6 sm:p-8 rounded-3xl glass-card shadow-card hover:border-teal-500/40 flex flex-col justify-between min-h-[240px] sm:min-h-[290px]"
+            data-tilt>
+            <div class="card-top flex items-center justify-between font-mono text-xs text-slate-400">
+              <span>NO.05 / PRODUCTION READY</span>
+              <span class="text-teal-600 text-base">↗</span>
+            </div>
+            <div
+              class="wide-content flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-6 mt-6 sm:mt-8">
+              <div class="max-w-md">
+                <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 mb-2">Просто
+                  изготовить.<br>Легко использовать.</h3>
+                <p class="text-slate-600 text-sm sm:text-base">Минимум деталей, понятная сборка и быстрый старт без
+                  инструкций.</p>
+              </div>
+              <div
+                class="parts-count self-start sm:self-auto inline-flex items-center gap-4 px-5 py-3.5 sm:py-4 rounded-2xl bg-teal-50 border border-teal-200/70 shrink-0">
+                <strong class="font-mono font-extrabold text-3xl sm:text-4xl text-teal-600">03</strong>
+                <span
+                  class="text-xs font-mono uppercase tracking-wider text-teal-900 leading-tight">ключевых<br>элемента</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 / HOW IT WORKS (3 STEPS) -->
+    <section class="work section scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-28" id="work">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="section-head reveal text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+          <p class="section-index font-mono text-xs font-semibold uppercase tracking-widest text-teal-600 mb-2 sm:mb-3">
+            04 / КАК ЭТО РАБОТАЕТ</p>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight leading-tight">
+            Три шага <span class="text-teal-600">к правильной осанке</span>
+          </h2>
+          <p class="text-slate-600 mt-3 sm:mt-4 text-sm sm:text-lg">
+            От надевания до автоматического контроля угла наклона головы — без приложений и сложных калибровок.
+          </p>
+        </div>
+
+        <div class="steps grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8 relative">
+          <!-- Step 1 -->
+          <article
+            class="step reveal glass-card p-6 sm:p-8 rounded-3xl shadow-card hover:shadow-glow hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+            <div class="w-full flex items-center justify-between font-mono text-xs text-slate-400 mb-4 sm:mb-6">
+              <span class="step-number px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-bold">ШАГ 01</span>
+              <span>ФИКСАЦИЯ</span>
+            </div>
+            <div
+              class="step-icon w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-teal-50 to-indigo-50 border border-teal-200/60 grid place-items-center mb-5 sm:mb-6 text-teal-700">
+              <svg viewBox="0 0 120 120" class="w-14 h-14 sm:w-16 sm:h-16 stroke-current fill-none" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M40 24c15-9 35-9 50 0l8 13v32c0 21-17 38-38 38S22 90 22 69V37z" />
+                <path d="M32 45c17 8 39 8 56 0M39 67h42" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mb-2">1. Надень и зафиксируй</h3>
+            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Расположи мягкую эргономичную опору вокруг шеи. Конструкция сразу задаёт базовую точку отсчёта угла
+              наклона головы.
+            </p>
+          </article>
+
+          <!-- Step 2 -->
+          <article
+            class="step reveal glass-card p-6 sm:p-8 rounded-3xl shadow-card hover:shadow-glow hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+            <div class="w-full flex items-center justify-between font-mono text-xs text-slate-400 mb-4 sm:mb-6">
+              <span class="step-number px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-bold">ШАГ 02</span>
+              <span>КОНТРОЛЬ УГЛА</span>
+            </div>
+            <div
+              class="step-icon w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-teal-50 to-indigo-50 border border-teal-200/60 grid place-items-center mb-5 sm:mb-6 text-teal-700">
+              <svg viewBox="0 0 120 120" class="w-14 h-14 sm:w-16 sm:h-16 stroke-current fill-none" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M23 38h74M23 60h74M23 82h74" />
+                <circle cx="48" cy="38" r="8" />
+                <circle cx="76" cy="60" r="8" />
+                <circle cx="56" cy="82" r="8" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mb-2">2. Отрегулируй под себя</h3>
+            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Настрой ремни и высоту опоры. При начале сутулости (наклон свыше 15°) система моментально определяет
+              отклонение.
+            </p>
+          </article>
+
+          <!-- Step 3 -->
+          <article
+            class="step reveal glass-card p-6 sm:p-8 rounded-3xl shadow-card hover:shadow-glow hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+            <div class="w-full flex items-center justify-between font-mono text-xs text-slate-400 mb-4 sm:mb-6">
+              <span class="step-number px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-bold">ШАГ 03</span>
+              <span>МЯГКАЯ КОРРЕКЦИЯ</span>
+            </div>
+            <div
+              class="step-icon w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-teal-50 to-indigo-50 border border-teal-200/60 grid place-items-center mb-5 sm:mb-6 text-teal-700">
+              <svg viewBox="0 0 120 120" class="w-14 h-14 sm:w-16 sm:h-16 stroke-current fill-none" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="59" cy="31" r="15" />
+                <path d="M59 46v29M35 106c2-25 10-38 24-38 15 0 24 13 26 38M73 70l23 9-11 27-25-10" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mb-2">3. Работай с комфортом</h3>
+            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Мягкая физическая опора сигнализирует о наклоне и помогает вернуть шею в анатомически правильное
+              положение.
+            </p>
+          </article>
+        </div>
+
+        <div
+          class="time-band reveal mt-8 sm:mt-10 p-4 sm:p-5 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row flex-wrap items-center justify-center gap-1.5 sm:gap-6 text-center shadow-lg">
+          <span class="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-300">Весь процесс подготовки
+            занимает</span>
+          <strong class="font-mono text-lg sm:text-xl text-teal-400 font-bold">менее 30 секунд</strong>
+          <span class="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-300">без приложений и
+            настроек</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 / TARGET AUDIENCE -->
+    <section
+      class="audience section scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-24 bg-slate-100/70 border-t border-slate-200/80"
+      id="audience">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="section-head reveal mb-8 sm:mb-12">
+          <p class="section-index font-mono text-xs font-semibold uppercase tracking-widest text-teal-600 mb-2 sm:mb-3">
+            05 / ДЛЯ КОГО</p>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight leading-tight">
+            Для тех, кто проводит <span class="text-teal-600">время перед экраном.</span>
+          </h2>
+        </div>
+
+        <div class="audience-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <article
+            class="audience-item reveal p-5 sm:p-6 rounded-2xl glass-card shadow-card hover:border-teal-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4 sm:mb-6">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-teal-50 text-teal-700">01</span>
+              <span class="text-teal-600 font-bold">↗</span>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900 mb-1">Школьники</h3>
+              <p class="text-slate-600 text-sm">Учёба, чтение и онлайн-задания с правильной осанкой с ранних лет</p>
+            </div>
+          </article>
+
+          <article
+            class="audience-item reveal p-5 sm:p-6 rounded-2xl glass-card shadow-card hover:border-teal-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4 sm:mb-6">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-teal-50 text-teal-700">02</span>
+              <span class="text-teal-600 font-bold">↗</span>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900 mb-1">Студенты</h3>
+              <p class="text-slate-600 text-sm">Конспекты, лекции и подготовка к сессии без перегрузки шеи</p>
+            </div>
+          </article>
+
+          <article
+            class="audience-item reveal p-5 sm:p-6 rounded-2xl glass-card shadow-card hover:border-teal-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4 sm:mb-6">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-teal-50 text-teal-700">03</span>
+              <span class="text-teal-600 font-bold">↗</span>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900 mb-1">Офисные сотрудники</h3>
+              <p class="text-slate-600 text-sm">Задачи на ноутбуке, телефоне и планшете в течение всего рабочего дня</p>
+            </div>
+          </article>
+
+          <article
+            class="audience-item reveal p-5 sm:p-6 rounded-2xl glass-card shadow-card hover:border-teal-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4 sm:mb-6">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-teal-50 text-teal-700">04</span>
+              <span class="text-teal-600 font-bold">↗</span>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900 mb-1">Активные пользователи</h3>
+              <p class="text-slate-600 text-sm">Все, кто долго пользуется гаджетами и заботится о здоровье позвоночника
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 / PROTOTYPE & 3D MODEL SECTION -->
+    <section class="prototype section scroll-mt-16 sm:scroll-mt-20 py-14 sm:py-20 lg:py-28 bg-slate-900 text-white"
+      id="prototype">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="section-head reveal flex flex-col lg:flex-row lg:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-14">
+          <div>
+            <p
+              class="section-index light font-mono text-xs font-semibold uppercase tracking-widest text-teal-400 mb-2 sm:mb-3">
+              06 / ИНЖЕНЕРНЫЙ ПРОТОТИП</p>
+            <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-tight">
+              От идеи — <span class="text-teal-400">к испытаниям.</span>
+            </h2>
+          </div>
+          <p class="text-slate-300 max-w-md text-sm sm:text-base">
+            Изучите интерактивную 3D-модель ортеза ErgoNeck со всех сторон или откройте детальный технический чертёж.
+          </p>
+        </div>
+
+        <div class="prototype-grid grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          <!-- Interactive 3D Model Panel -->
+          <figure
+            class="prototype-panel model-panel reveal rounded-3xl overflow-hidden bg-slate-800/90 border border-slate-700 shadow-2xl flex flex-col">
+            <figcaption class="px-5 sm:px-6 py-4 border-b border-slate-700/80 flex items-center justify-between gap-2">
+              <span class="font-mono text-[11px] sm:text-xs text-teal-400 uppercase tracking-wider">3D MODEL /
+                INTERACTIVE</span>
+              <strong class="text-xs sm:text-sm font-semibold text-white">Объёмная модель</strong>
+            </figcaption>
+            <div
+              class="prototype-view interactive-view relative h-[300px] sm:h-[430px] bg-gradient-to-b from-slate-700 via-slate-800 to-slate-950 cursor-pointer group"
+              data-modal-type="model" role="button" tabindex="0"
+              aria-label="Открыть интерактивную 3D-модель на весь экран">
+              <model-viewer data-model-src="ergoneck-model.glb" alt="Интерактивная 3D-модель шейного ортеза ErgoNeck"
+                camera-controls auto-rotate rotation-per-second="14deg" camera-orbit="28deg 68deg 135%"
+                field-of-view="32deg" interaction-prompt="none" environment-image="neutral" shadow-intensity="1.5"
+                exposure="0.56"></model-viewer>
+              <span
+                class="expand-hint absolute right-3 bottom-3 sm:right-4 sm:bottom-4 z-10 min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-xs font-semibold text-white group-hover:bg-teal-600 transition-colors">
+                <span class="text-teal-300 group-hover:text-white">↗</span>
+                Открыть и вращать 3D
+              </span>
+            </div>
+          </figure>
+
+          <!-- Technical Blueprint Panel -->
+          <figure
+            class="prototype-panel drawing-panel reveal rounded-3xl overflow-hidden bg-slate-800/90 border border-slate-700 shadow-2xl flex flex-col">
+            <figcaption class="px-5 sm:px-6 py-4 border-b border-slate-700/80 flex items-center justify-between gap-2">
+              <span class="font-mono text-[11px] sm:text-xs text-teal-400 uppercase tracking-wider">BLUEPRINT /
+                V4.1</span>
+              <strong class="text-xs sm:text-sm font-semibold text-white">Технический чертёж</strong>
+            </figcaption>
+            <div
+              class="prototype-view interactive-view relative h-[300px] sm:h-[430px] bg-slate-100 p-3 sm:p-4 pb-16 sm:pb-4 cursor-pointer group flex items-center justify-center"
+              data-modal-type="blueprint" role="button" tabindex="0"
+              aria-label="Открыть технический чертёж на весь экран">
+              <img src="ergoneck-blueprint.jpg" alt="Технический чертёж ErgoNeck с размерами и обозначениями"
+                class="w-full h-full object-contain rounded-xl group-hover:scale-[1.02] transition-transform duration-300">
+              <span
+                class="expand-hint absolute right-3 bottom-3 sm:right-4 sm:bottom-4 z-10 min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-xs font-semibold text-white group-hover:bg-teal-600 transition-colors">
+                <span class="text-teal-300 group-hover:text-white">↗</span>
+                Увеличить чертёж
+              </span>
+            </div>
+          </figure>
+        </div>
+
+        <div
+          class="prototype-note reveal mt-6 p-4 sm:p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div class="flex items-start sm:items-center gap-3.5">
+            <span
+              class="note-symbol w-8 h-8 rounded-full border border-teal-400/50 text-teal-300 font-mono text-xs grid place-items-center shrink-0">i</span>
+            <p class="text-slate-300 text-xs sm:text-sm"><strong class="text-white">Концептуальная модель.</strong>
+              Конструкция и размеры будут уточнены после серии пользовательских испытаний.</p>
+          </div>
+          <span class="note-code font-mono text-xs text-slate-400 pl-11 sm:pl-0">REV. 01 / 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA / PURCHASE SECTION -->
+    <section
+      class="final-cta scroll-mt-16 sm:scroll-mt-20 py-16 sm:py-20 lg:py-28 relative overflow-hidden bg-gradient-to-br from-teal-600 via-teal-700 to-indigo-800 text-white"
+      id="purchase">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div class="cta-content reveal space-y-5 sm:space-y-6">
+          <p class="section-index light font-mono text-xs uppercase tracking-widest text-teal-200">ERGO / NECK / PROJECT
+          </p>
+          <h2 class="font-display font-extrabold text-3xl sm:text-6xl tracking-tight leading-tight">
+            Простая механика <br><span class="text-teal-200">полезной привычки</span>
+          </h2>
+          <p class="text-teal-50 text-sm sm:text-xl max-w-2xl mx-auto leading-relaxed">
+            ErgoNeck делает работу с гаджетами более осознанной и комфортной — без боли в шее и незаметной сутулости.
+          </p>
+          <div class="pt-2 sm:pt-4">
+            <button
+              class="button purchase-button min-h-[52px] w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-white text-slate-900 font-display font-bold text-base shadow-2xl hover:bg-teal-50 hover:scale-105 transition-all duration-300 cursor-pointer"
+              id="purchase-button" type="button">
+              <span>Купить ErgoNeck</span>
+              <span class="text-teal-600 text-lg">↗</span>
+            </button>
+            <p class="purchase-status min-h-[24px] mt-4 font-medium text-sm text-teal-100" id="purchase-status"
+              role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FULLSCREEN MEDIA MODAL (3D Model & Blueprint) -->
+  <dialog class="media-modal" id="media-modal" aria-labelledby="modal-title">
+    <div
+      class="modal-shell w-full h-full sm:w-[95vw] max-w-6xl sm:h-[90dvh] sm:my-[5dvh] mx-auto flex flex-col overflow-hidden sm:rounded-3xl bg-slate-900 border-0 sm:border border-slate-700 shadow-2xl text-white">
+      <div
+        class="modal-head px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-800 flex items-center justify-between gap-4">
+        <div>
+          <span class="modal-kicker font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-teal-400 block"
+            id="modal-kicker">ERGO / NECK</span>
+          <strong class="font-display text-base sm:text-lg text-white" id="modal-title">Просмотр</strong>
+        </div>
+        <button
+          class="modal-close w-11 h-11 rounded-full bg-slate-800 hover:bg-teal-600 border border-slate-700 text-white text-2xl leading-none grid place-items-center transition-colors cursor-pointer"
+          type="button" aria-label="Закрыть просмотр">×</button>
+      </div>
+      <div class="modal-stage flex-1 min-h-0 relative grid place-items-center overflow-hidden bg-slate-950"
+        id="modal-stage"></div>
+      <p class="modal-help px-4 sm:px-6 py-3 bg-slate-900 border-t border-slate-800 font-mono text-[11px] sm:text-xs text-slate-400 text-center uppercase tracking-wider"
+        id="modal-help"></p>
+    </div>
+  </dialog>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 text-slate-400 py-8 sm:py-10 border-t border-slate-900">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+      <a class="brand footer-brand min-h-[44px] inline-flex items-center gap-3 text-white font-display font-bold text-lg"
+        href="#top">
+        <span
+          class="brand-mark w-8 h-8 rounded-lg bg-teal-600 text-white text-sm grid place-items-center font-extrabold">E</span>
+        <span>ErgoNeck</span>
+      </a>
+      <p class="text-xs text-slate-500 text-center">Эргономический прототип, не является медицинским изделием.</p>
+      <a href="#top"
+        class="min-h-[44px] px-3 inline-flex items-center text-xs font-mono uppercase tracking-wider text-teal-400 hover:text-teal-300 transition-colors">Наверх
+        ↑</a>
+    </div>
+  </footer>
+
+  <!-- APPLICATION SCRIPTS -->
+  <script>
+    // 1. Mobile Menu Navigation Logic
+    const menuButton = document.querySelector('.menu-toggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const bar1 = document.querySelector('.menu-bar-1');
+    const bar2 = document.querySelector('.menu-bar-2');
+
+    function setMenu(open) {
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+      document.body.classList.toggle('menu-open', open);
+
+      if (open) {
+        mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        mobileMenu.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        if (bar1 && bar2) {
+          bar1.style.transform = 'translateY(4px) rotate(45deg)';
+          bar2.style.transform = 'translateY(-4px) rotate(-45deg)';
+        }
+      } else {
+        mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        if (bar1 && bar2) {
+          bar1.style.transform = '';
+          bar2.style.transform = '';
+        }
+      }
+    }
+
+    menuButton.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
+    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setMenu(false);
+    });
+
+    // 2. Scroll Reveal Observer
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -20px' });
+
+    document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
+
+    // 3. 3D Card Tilt Micro-Interaction (desktop pointer only)
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('[data-tilt]').forEach(card => {
+        card.addEventListener('pointermove', event => {
+          const rect = card.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - 0.5;
+          const y = (event.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = `perspective(800px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg) translateY(-4px)`;
+        });
+        card.addEventListener('pointerleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    // 4. Live Posture & ErgoNeck Correction Simulator
+    const postureSlider = document.getElementById('posture-slider');
+    const ergoModeToggle = document.getElementById('ergo-mode-toggle');
+    const ergoModeLabel = document.getElementById('ergo-mode-label');
+    const simModeSubtitle = document.getElementById('sim-mode-subtitle');
+    const simAngleBadge = document.getElementById('sim-angle-badge');
+    const simAngleReadout = document.getElementById('sim-angle-readout');
+    const simLoadReadout = document.getElementById('sim-load-readout');
+    const simLoadSub = document.getElementById('sim-load-sub');
+    const simStatusReadout = document.getElementById('sim-status-readout');
+    const simActionSub = document.getElementById('sim-action-sub');
+    const simHeadGroup = document.getElementById('sim-head-group');
+    const simCollar = document.getElementById('sim-collar');
+    const simSvgPill = document.getElementById('sim-svg-pill');
+    const simFeedbackBanner = document.getElementById('sim-feedback-banner');
+
+    let ergoActive = true;
+    let correctionTimer = null;
+
+    function calculateNeckLoadKg(angle) {
+      return (5 + angle * 0.36 + (angle * angle) * 0.0012).toFixed(1);
+    }
+
+    function updateSimulator(angle, isAutoCorrecting = false) {
+      const numericAngle = Number(angle);
+      const loadKg = calculateNeckLoadKg(numericAngle);
+
+      postureSlider.value = numericAngle;
+      simAngleBadge.textContent = `${numericAngle}°`;
+      simAngleReadout.textContent = `${numericAngle}°`;
+      simLoadReadout.textContent = `${loadKg} кг`;
+      simHeadGroup.setAttribute('transform', `rotate(${numericAngle}, 110, 175)`);
+
+      if (numericAngle <= 15) {
+        simAngleBadge.className = 'px-3 py-1 rounded-lg bg-teal-50 text-teal-700 font-mono font-bold text-base sm:text-lg border border-teal-200';
+        simStatusReadout.textContent = 'Оптимальная поза';
+        simStatusReadout.className = 'font-display font-bold text-base text-teal-600 block mt-0.5';
+        simLoadSub.textContent = 'Физиологическая норма';
+        simActionSub.textContent = isAutoCorrecting ? 'Скорректировано ErgoNeck ✓' : 'Шея в безопасной зоне 0–15°';
+        simSvgPill.textContent = 'НОРМА 0–15°';
+        simSvgPill.className = 'px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30';
+        simFeedbackBanner.textContent = isAutoCorrecting
+          ? 'ErgoNeck мягко ограничил наклон и вернул шею в безопасный диапазон 15°!'
+          : 'Опора ErgoNeck поддерживает шею в комфортном диапазоне 0–15°.';
+      } else if (numericAngle <= 28) {
+        simAngleBadge.className = 'px-3 py-1 rounded-lg bg-amber-50 text-amber-700 font-mono font-bold text-base sm:text-lg border border-amber-200';
+        simStatusReadout.textContent = 'Превышение угла';
+        simStatusReadout.className = 'font-display font-bold text-base text-amber-600 block mt-0.5';
+        simLoadSub.textContent = 'Повышенная нагрузка';
+        simActionSub.textContent = ergoActive ? 'Срабатывает упор ErgoNeck...' : 'Начало сутулости';
+        simSvgPill.textContent = 'ВНИМАНИЕ >15°';
+        simSvgPill.className = 'px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        simFeedbackBanner.textContent = ergoActive
+          ? 'Угол выше 15°: тактильный упор ErgoNeck сигнализирует и возвращает голову выше.'
+          : 'Режим ErgoNeck выключен: мышцы шеи начинают перегружаться.';
+      } else {
+        simAngleBadge.className = 'px-3 py-1 rounded-lg bg-rose-50 text-rose-700 font-mono font-bold text-base sm:text-lg border border-rose-200';
+        simStatusReadout.textContent = 'Синдром Tech Neck';
+        simStatusReadout.className = 'font-display font-bold text-base text-rose-600 block mt-0.5';
+        simLoadSub.textContent = 'Критическая перегрузка!';
+        simActionSub.textContent = ergoActive ? 'Активный возврат в 15°...' : 'Риск спазма и боли в шее';
+        simSvgPill.textContent = 'ПЕРЕГРУЗКА ' + numericAngle + '°';
+        simSvgPill.className = 'px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30';
+        simFeedbackBanner.textContent = ergoActive
+          ? 'Критический наклон! ErgoNeck мягко амортизирует и возвращает шею к 15°...'
+          : 'Без ErgoNeck нагрузка на шейный отдел превышает норму в 3–4 раза.';
+      }
+
+      clearTimeout(correctionTimer);
+      if (ergoActive && numericAngle > 15) {
+        correctionTimer = setTimeout(() => {
+          updateSimulator(15, true);
+        }, 900);
+      }
+    }
+
+    postureSlider.addEventListener('input', e => {
+      updateSimulator(e.target.value, false);
+    });
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        updateSimulator(btn.dataset.presetAngle, false);
+      });
+    });
+
+    ergoModeToggle.addEventListener('click', () => {
+      ergoActive = !ergoActive;
+      ergoModeToggle.setAttribute('aria-checked', String(ergoActive));
+      if (ergoActive) {
+        ergoModeToggle.className = 'min-h-[44px] w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-teal-500 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer hover:bg-teal-400';
+        ergoModeLabel.textContent = 'ERGONECK: ВКЛ';
+        simModeSubtitle.textContent = 'Активен: мягко возвращает угол к ≤ 15°';
+        simCollar.setAttribute('opacity', '1');
+        if (Number(postureSlider.value) > 15) {
+          updateSimulator(15, true);
+        }
+      } else {
+        ergoModeToggle.className = 'min-h-[44px] w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-700 text-slate-300 font-mono text-xs font-bold transition-all cursor-pointer hover:bg-slate-600';
+        ergoModeLabel.textContent = 'ERGONECK: ВЫКЛ';
+        simModeSubtitle.textContent = 'Выключен: наклон головы не ограничивается';
+        simCollar.setAttribute('opacity', '0.25');
+        updateSimulator(postureSlider.value, false);
+      }
+    });
+
+    // 5. 3D Model Viewer & Fullscreen Media Modal Logic
+    const mediaModal = document.querySelector('#media-modal');
+    const modalStage = document.querySelector('#modal-stage');
+    const modalTitle = document.querySelector('#modal-title');
+    const modalKicker = document.querySelector('#modal-kicker');
+    const modalHelp = document.querySelector('#modal-help');
+    const modalClose = document.querySelector('.modal-close');
+    const modelSource = window.ERGONECK_MODEL_DATA || 'ergoneck-model.glb';
+
+    function enhanceModelViewer(viewer) {
+      const applyMaterials = () => {
+        const materials = viewer.model?.materials || [];
+        materials.forEach(material => {
+          const surface = material.pbrMetallicRoughness;
+          if (!surface) return;
+          surface.setBaseColorFactor([0.68, 0.76, 0.82, 1]);
+          surface.setMetallicFactor(0.06);
+          surface.setRoughnessFactor(0.74);
+        });
+      };
+
+      viewer.addEventListener('load', applyMaterials, { once: true });
+      if (viewer.loaded) applyMaterials();
+    }
+
+    document.querySelectorAll('model-viewer').forEach(viewer => {
+      viewer.setAttribute('src', modelSource);
+      enhanceModelViewer(viewer);
+    });
+
+    function openMediaModal(type) {
+      modalStage.replaceChildren();
+
+      if (type === 'model') {
+        const viewer = document.createElement('model-viewer');
+        viewer.setAttribute('src', modelSource);
+        viewer.setAttribute('alt', 'Интерактивная 3D-модель шейного ортеза ErgoNeck');
+        viewer.setAttribute('camera-controls', '');
+        viewer.setAttribute('auto-rotate', '');
+        viewer.setAttribute('rotation-per-second', '12deg');
+        viewer.setAttribute('camera-orbit', '28deg 68deg 128%');
+        viewer.setAttribute('field-of-view', '31deg');
+        viewer.setAttribute('interaction-prompt', 'auto');
+        viewer.setAttribute('environment-image', 'neutral');
+        viewer.setAttribute('shadow-intensity', '1.5');
+        viewer.setAttribute('exposure', '0.56');
+        viewer.style.width = '100%';
+        viewer.style.height = '100%';
+        enhanceModelViewer(viewer);
+        modalStage.append(viewer);
+        modalKicker.textContent = '3D MODEL / INTERACTIVE';
+        modalTitle.textContent = 'Объёмная модель ErgoNeck';
+        modalHelp.textContent = 'Зажмите и перемещайте, чтобы вращать · колесо или жест — масштаб';
+      } else {
+        const image = document.createElement('img');
+        image.src = 'ergoneck-blueprint.jpg';
+        image.alt = 'Технический чертёж ErgoNeck с размерами и обозначениями';
+        image.className = 'w-full h-full object-contain p-3 sm:p-4 bg-slate-100';
+        modalStage.append(image);
+        modalKicker.textContent = 'BLUEPRINT / V4.1';
+        modalTitle.textContent = 'Технический чертёж ErgoNeck';
+        modalHelp.textContent = 'Нажмите Esc или кнопку закрытия, чтобы вернуться на сайт';
+      }
+
+      document.body.classList.add('modal-open');
+      mediaModal.showModal();
+    }
+
+    document.querySelectorAll('[data-modal-type]').forEach(view => {
+      view.addEventListener('click', () => openMediaModal(view.dataset.modalType));
+      view.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openMediaModal(view.dataset.modalType);
+        }
+      });
+    });
+
+    modalClose.addEventListener('pointerdown', event => event.stopPropagation());
+    modalClose.addEventListener('click', event => {
+      event.stopPropagation();
+      mediaModal.close();
+    });
+    mediaModal.addEventListener('click', event => {
+      if (event.target === mediaModal) mediaModal.close();
+    });
+    mediaModal.addEventListener('close', () => {
+      document.body.classList.remove('modal-open');
+      modalStage.replaceChildren();
+    });
+
+    // 6. Purchase CTA Status Handler
+    const purchaseButton = document.querySelector('#purchase-button');
+    const purchaseStatus = document.querySelector('#purchase-status');
+    purchaseButton.addEventListener('click', () => {
+      purchaseButton.classList.add('bg-teal-100', 'text-teal-950');
+      purchaseButton.innerHTML = '<span>Предзаказ скоро</span> <span class="text-teal-600 font-bold">✓</span>';
+      purchaseStatus.textContent = 'Продажи откроются после финальных испытаний ErgoNeck.';
+    });
+  </script>
+</body>
+
+</html>
